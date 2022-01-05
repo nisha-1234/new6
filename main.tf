@@ -1,13 +1,13 @@
 #Declaring AWS Provider and credentials
 provider "aws" {
   region     = "us-west-1"
-  access_key = "AKIAUYEPIAMT3O737FHG"
-  secret_key = "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"
+  access_key = "AKIAS7T2UNA2DZIOJBXL"
+  secret_key = "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"
 }
 #######################################################
 #Creating Webserver
 resource "aws_instance" "webserver" {
- ami = "ami-053ac55bdcfe96e85"
+ ami = "ami-01a9db914db1193ec"
  instance_type = "t2.micro"
  key_name = var.keyname
  vpc_security_group_ids = [var.linux_security_group]
@@ -27,7 +27,7 @@ output "Webserver_instance_id" {
 #######################################################
 #Creating Application
 resource "aws_instance" "application" {
- ami = "ami-0cf4a2d03d1a3d62c"
+ ami = "ami-05feb7439e86af1d9"
  instance_type = "t2.micro"
  key_name = var.keyname
  vpc_security_group_ids = [var.windows_security_group]
@@ -46,7 +46,7 @@ output "Application_instance_id" {
 #######################################################
 #Creating db
 resource "aws_instance" "db" {
- ami = "ami-00694521ba320ed02"
+ ami = "ami-0bac45e8972d2593e"
  instance_type = "t3.xlarge"
  key_name = var.keyname
  vpc_security_group_ids = [var.windows_security_group]
