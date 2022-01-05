@@ -1,15 +1,15 @@
 variable "publicsubnetid" {
-    default = "subnet-02d6afd52ac5a0bdd"
+    default = "subnet-086b9d634c0232e1f"
 }
 variable "privatesubnetid" {
-    default = "subnet-02a6d0c834b09b206"
+    default = "subnet-09241f283e3ce2d65"
 }
 variable "keyname" {
-    default = "keypair3"
+    default = "ALL-key"
 }
 variable "windows_security_group" {
-    default = "sg-06d8add1c977d915c"
+    default = "sg-01d7fe826df4f65c7"
 }
 variable "linux_security_group" {
-    default = "sg-0b9fd6504ae7e4309"
+    default = "sg-025d3630c580a8981"
 }
