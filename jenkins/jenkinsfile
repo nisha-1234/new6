@@ -1,16 +1,19 @@
 pipeline{
         agent any
     parameters {
-
-                string(name: 'git_url', defaultValue: '', description: 'git url')
                 string(name: 'git_branch', defaultValue: '', description: 'git_branch')
+                choice(name: 'region',
+                         choices: ['','us-east-2','us-east-1', 'us-west-1','us-west-2', 'ap-souht-1'],
+                                description: 'Apply will deploy in us-east-2,us-east-1,us-west-1,us-west-2,ap-souht-1..')
                 choice(name: 'resoure',
                          choices: ['','iam','s3', 'vpc','ec2', 'rds'],
                                 description: 'Apply will deploy a VPC, s3, rds..')
-                string(name: 'folder_name', defaultValue: '', description: 'folder name')
-                choice(name: 'build_option',
+                string(name: 'resource_name', defaultValue: '', description: 'folder name')
+                choice(name: 'terraform_option',
                          choices: ['','plan','apply', 'destroy'],
                                 description: 'Apply will deploy a VPC, and Destroy will remove the VPC..')
+                string(name: 'access_key', defaultValue: '', description: 'access_key')  
+                string(name: 'secret_key', defaultValue: '', description: 'secret_key') 
                 }
      stages{
          stage('Git Checkout'){
@@ -21,19 +24,21 @@ pipeline{
                     echo "Git initilization started"
                     git init 
                     echo "Git initilization completed"
-                    git fetch ${git_url}
+                    git fetch https://github.com/umeshbalajis/automation
                     git branch -r
                     git checkout ${git_branch}
-                    git clone ${git_url}
+                    git clone https://github.com/umeshbalajis/automation
                     echo "Git pull completed"
+                    sed -i 's/aws_access_key/${access_key}'/ /home/jenkins/git/automation/${resoure}/${resource_name}/main.tf
+                    sed -i 's/aws_secret_key/${secret_key}'/ /home/jenkins/git/automation/${resoure}/${resource_name}/main.tf
                     """
             }
          }
           stage('Terraform init '){
           steps{
                     sh """
-                        terraform -chdir="/home/jenkins/git/new6/${resoure}/${folder_name}/" init 
-                        terraform -chdir="/home/jenkins/git/new6/${resoure}/${folder_name}/" ${build_option} --auto-approve 
+                        terraform -chdir="/home/jenkins/git/automation/${resoure}/${resource_name}/" init 
+                        terraform -chdir="/home/jenkins/git/automation/${resoure}/${resource_name}/" ${terraform_option} --auto-approve -var="region=${region}"
                         """
             }
          }
